@@ -1,0 +1,26 @@
+const mongoose = require("mongoose");
+const joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
+
+const userSchema = new mongoose.Schema({
+  fullname: { type: String, required: true },
+  username: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  version: { type: String, required: true },
+});
+
+const User = mongoose.model("user", userSchema);
+
+const validate = (data) => {
+  const schema = joi.object({
+    fullname: joi.string().required().label("Full Name"),
+    username: joi.string().required().label("User Name"),
+    email: joi.string().email().required().label("Email"),
+    password: passwordComplexity().required().label("Password"),
+    version: joi.string().required().label("Version"),
+  });
+  return schema.validate(data);
+};
+
+module.exports = { User, validate };
