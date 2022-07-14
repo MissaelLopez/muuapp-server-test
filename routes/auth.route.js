@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { User } = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 const joi = require("joi");
 const bcrypt = require("bcrypt");
 
@@ -7,12 +8,12 @@ router.post("/", async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error) {
-      return res.status(400).send({ message: error.details[0].message });
+      return res.status(400).send({ msg: error.details[0].message });
     }
 
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(401).send({ message: "Invalid Email" });
+      return res.status(401).send({ msg: "Invalid Email" });
     }
 
     const validPassword = await bcrypt.compare(
@@ -21,14 +22,14 @@ router.post("/", async (req, res) => {
     );
 
     if (!validPassword) {
-      return res.status(401).send({ message: "Invalid Password" });
+      return res.status(401).send({ msg: "Invalid Password" });
     }
 
-    const token = user.id;
+    const token = user.generateAuthToken(user.id);
 
-    res.status(200).send({ token, message: "Logged in successfully" });
+    res.status(200).send({ token, msg: "Logged in successfully" });
   } catch (error) {
-    res.status(500).send({ message: "Internal server error" });
+    res.status(500).send({ msg: "Internal server error" });
   }
 });
 
