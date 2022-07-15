@@ -1,16 +1,17 @@
 const router = require("express").Router();
 const { User, validate } = require("../models/user.model");
 const bcrypt = require("bcrypt");
+const methods = require("../methods");
 
 // Get users
-router.get("/", async (req, res) => {
+router.get("/", methods.ensureToken, async (req, res) => {
   const users = await User.find();
   res.status(200).json(users);
 });
 
 // Get a user
-router.get("/:id", async (req, res) => {
-  const user = await User.findById(req.params.id);
+router.get("/:id", methods.ensureToken, async (req, res) => {
+  const user = await User.findById(req.params.id).populate("livestock");
   res.status(200).json(user);
 });
 
@@ -38,7 +39,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", methods.ensureToken, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).send({ msg: "User deleted successfully" });
