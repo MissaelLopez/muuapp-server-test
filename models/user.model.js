@@ -10,12 +10,12 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   version: { type: String, required: true },
-  livestock: [{ type: ObjectId, ref: "livestock" }],
+  ranchs: [{ type: ObjectId, ref: "ranch" }],
 });
 
 userSchema.methods.generateAuthToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_PRIVATE_TOKEN, {
-    expiresIn: "7d",
+    expiresIn: "1d",
   });
   return token;
 };

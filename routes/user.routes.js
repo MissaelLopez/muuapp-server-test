@@ -11,7 +11,7 @@ router.get("/", methods.ensureToken, async (req, res) => {
 
 // Get a user
 router.get("/:id", methods.ensureToken, async (req, res) => {
-  const user = await User.findById(req.params.id).populate("livestock");
+  const user = await User.findById(req.params.id).populate("ranchs");
   res.status(200).json(user);
 });
 

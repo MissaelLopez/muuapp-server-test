@@ -11,7 +11,7 @@ const livestockSchema = new mongoose.Schema({
   dateBirth: { type: Date, required: true },
   phase: { type: String, required: true },
   weight: { type: String, required: true },
-  user: { type: ObjectId, ref: "user", required: true },
+  ranch: { type: ObjectId, ref: "ranch", required: true },
 });
 
 const Livestock = mongoose.model("livestock", livestockSchema);
@@ -26,7 +26,7 @@ const validate = (data) => {
     dateBirth: joi.date().required().label("DateBirth"),
     phase: joi.string().required().label("Phase"),
     weight: joi.string().required().label("Weight"),
-    user: joi.string().required().label("User Id"),
+    ranch: joi.string().required().label("Ranch Id"),
   });
   return schema.validate(data);
 };
