@@ -9,6 +9,7 @@ const connection = require("./db");
 const userRoutes = require("./routes/user.routes");
 const authRoutes = require("./routes/auth.routes");
 const livestockRoutes = require("./routes/livestock.routes");
+const ranchRoutes = require("./routes/ranch.routes");
 
 // Database connection
 connection();
@@ -22,6 +23,7 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/livestock", livestockRoutes);
+app.use("/api/ranchs", ranchRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`🚀 Server started at port ${port}`));

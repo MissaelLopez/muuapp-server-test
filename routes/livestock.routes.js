@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { Livestock, validate } = require("../models/livestock.model");
-const { User } = require("../models/user.model");
+const { Ranch } = require("../models/ranch.model");
 const methods = require("../methods");
 
 // Get Livestocks
@@ -26,14 +26,23 @@ router.post("/", methods.ensureToken, async (req, res) => {
 
     const livestock = await new Livestock({ ...req.body }).save();
 
-    const userId = req.body.user;
+    const ranchId = req.body.ranch;
     const livestockId = livestock._id;
 
-    const user = await User.findById(userId);
-    user.livestock.push(livestockId);
-    await user.save();
+    const ranch = await Ranch.findById(ranchId);
+    ranch.livestock.push(livestockId);
+    await ranch.save();
 
     res.status(201).send({ msg: "Livestock created successfully" });
+  } catch (error) {
+    res.status(500).send({ msg: error.message });
+  }
+});
+
+router.delete("/:id", methods.ensureToken, async (req, res) => {
+  try {
+    await Livestock.findByIdAndDelete(req.params.id);
+    res.status(200).send({ msg: "Livestock deleted successfully" });
   } catch (error) {
     res.status(500).send({ msg: error.message });
   }
