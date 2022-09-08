@@ -55,8 +55,12 @@ router.put("/:id", async (req, res) => {
 })
 
 // Delete a ranch
-router.delete("/:id", methods.ensureToken, async (req, res) => {
+router.delete("/:user/:id", methods.ensureToken, async (req, res) => {
   try {
+    const user = await User.findById(req.params.user);
+    const index = user.ranchs.indexOf(req.params.id);
+    user.ranchs.splice(index, 1);
+    await user.save();
     await Ranch.findByIdAndDelete(req.params.id);
     res.status(200).send({ msg: "Ranch deleted successfully" });
   } catch (error) {
