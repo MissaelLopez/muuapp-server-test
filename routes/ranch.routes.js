@@ -11,7 +11,7 @@ router.get("/", methods.ensureToken, async (req, res) => {
 
 // Get a ranch
 router.get("/:id", methods.ensureToken, async (req, res) => {
-  const ranch = await Ranch.findById(req.params.id).populate("livestock");
+  const ranch = await Ranch.findById(req.params.id).populate("cows");
   res.status(200).json(ranch);
 });
 

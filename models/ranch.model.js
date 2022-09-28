@@ -13,7 +13,8 @@ const RanchSchema = new mongoose.Schema({
   lng: { type: String, required: true },
   production: { type: String, required: true },
   areaSpace: { type: String, required: true },
-  livestock: [{ type: ObjectId, ref: "livestock" }],
+  cows: [{ type: ObjectId, ref: "cow" }],
+  isSelected: { type: Boolean, default: true },
   todo: [{ activity: String, date: Date, status: String, comment: String }],
   user: { type: ObjectId, ref: "user", required: true },
 });
