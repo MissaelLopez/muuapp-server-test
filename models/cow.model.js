@@ -27,9 +27,9 @@ const CowSchema = new mongoose.Schema({
   utp: { type: String, required: true },
   fechaNacimiento: { type: Date, required: true },
   etapa: { type: String, required: true },
-  /* peso: { type: String, required: true }, */
   peso: pesoSchema,
   padres: padresSchema,
+  pesos: [{ fecha: Date, peso: String, dieta: String, _id: false }],
   ranch: { type: ObjectId, ref: "ranch", required: true },
 });
 

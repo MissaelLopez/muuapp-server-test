@@ -26,11 +26,9 @@ router.post("/", methods.ensureToken, async (req, res) => {
 
     const cow = await Cow.findOne({ nombre: req.body.nombre });
     if (cow) {
-      return res
-        .status(409)
-        .send({
-          msg: `Ya existe un bovino registrado con el nombre ${req.body.nombre}`,
-        });
+      return res.status(409).send({
+        msg: `Ya existe un bovino registrado con el nombre ${req.body.nombre}`,
+      });
     }
 
     const newCow = await new Cow({ ...req.body }).save();
@@ -43,6 +41,22 @@ router.post("/", methods.ensureToken, async (req, res) => {
     await ranch.save();
 
     res.status(201).send({ msg: "Cow created successfully" });
+  } catch (error) {
+    res.status(500).send({ msg: error.message });
+  }
+});
+
+// Add Weight
+router.post("/weight", methods.ensureToken, async (req, res) => {
+  try {
+    const cow = await Cow.findById(req.body.id);
+    cow.pesos.push({
+      fecha: req.body.fecha,
+      peso: req.body.peso,
+      dieta: req.body.dieta,
+    });
+    await cow.save();
+    res.status(200).send({ msg: "Weight added successfully" });
   } catch (error) {
     res.status(500).send({ msg: error.message });
   }
