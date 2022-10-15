@@ -53,7 +53,7 @@ router.post("/weight", methods.ensureToken, async (req, res) => {
     cow.pesos.push({
       fecha: req.body.fecha,
       peso: req.body.peso,
-      dieta: req.body.dieta,
+      descripcion: req.body.descripcion,
     });
     await cow.save();
     res.status(200).send({ msg: "Weight added successfully" });
