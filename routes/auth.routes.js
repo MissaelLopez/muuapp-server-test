@@ -2,6 +2,17 @@ const router = require("express").Router();
 const { User } = require("../models/user.model");
 const joi = require("joi");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  port: 465,
+  host: "smtp.gmail.com",
+  auth: {
+    user: process.env.MAIL,
+    pass: process.env.PASS,
+  },
+  secure: true,
+});
 
 router.post("/", async (req, res) => {
   try {
@@ -32,6 +43,25 @@ router.post("/", async (req, res) => {
   } catch (error) {
     res.status(500).send({ msg: "Internal server error" });
   }
+});
+
+router.post("/recover", async (req, res) => {
+  const mailData = {
+    from: "MuuApp",
+    to: req.body.email,
+    subject: "Sending Email using NodeJS",
+    html: `<p>Recuperacion de contrasenia</p>
+          <br />
+          This is our first message sent with Nodemailer`,
+  };
+
+  transporter.sendMail(mailData, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ msg: "Internal server error" });
+    }
+    res.status(200).send({ msg: "Mail send", messageId: info.messageId });
+  });
 });
 
 const validate = (data) => {
