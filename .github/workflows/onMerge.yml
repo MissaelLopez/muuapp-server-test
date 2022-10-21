@@ -12,5 +12,5 @@ jobs:
     - name: build and push to docker
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "missaellopez" --password-stdin
-        docker image build -t missaellopez/muuapp-server:${{ github.sha }}
+        docker image build -t missaellopez/muuapp-server:${{ github.sha }} .
         docker push missaellopez/muuapp-server:${{ github.sha }}
